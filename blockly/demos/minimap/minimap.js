@@ -34,7 +34,6 @@ var Minimap = {};
 * @param {Workspace} minimap The workspace that will be used as a minimap
 */
 Minimap.init = function(workspace,minimap){
-    console.log("hello");
     this.workspace= workspace;
     this.minimap= minimap;
     // used as left padding in the minimap
