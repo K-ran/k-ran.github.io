@@ -34,11 +34,35 @@ var Minimap = {};
 * @param {Workspace} minimap The workspace that will be used as a minimap
 */
 Minimap.init = function(workspace,minimap){
-    console.log("hello");
     this.workspace= workspace;
     this.minimap= minimap;
+
+    //Adding scroll callback functionlity to vScroll just for this demo.
+    //IMPORTANT: This should be changed when there is proper UI event handling
+    //           api available and should be handled by workspace's event listeners
+    this.workspace.scrollbar.vScroll.onScroll_ = function(){
+        var ratio = this.handlePosition_ / this.scrollViewSize_;
+        if (isNaN(ratio)) {
+          ratio = 0;
+        }
+        var xyRatio = {};
+        if (this.horizontal_) {
+          xyRatio.x = ratio;
+        } else {
+          xyRatio.y = ratio;
+        }
+        this.workspace_.setMetrics(xyRatio);
+
+        // get the absolutePosition
+        var absolutePosition = (this.handlePosition_/this.ratio_);
+
+        // firing the scroll change listener
+        Minimap.onScrollChange(absolutePosition,this.horizontal_)
+    }
+
     // used as left padding in the minimap
     this.PADDING = 5;
+
     // required to stop a positive feedback loop when user clicks minimap
     // and the scroll changes, which inturn may change minimap.
     this.disableScrollChange=false;
@@ -66,22 +90,49 @@ Minimap.init = function(workspace,minimap){
     Blockly.utils.createSvgElement('rect', {
         'width':100,
         'height':100,
-        'draggable':'true',
         'class':'mapDragger'
     },this.svg);
 
     // Rectangle in the minimap that represents current view.
     this.mapDragger = this.svg.childNodes[0];
 
+    // Adding mouse events to the rectangle, to make it Draggable
+    this.mapDragger.addEventListener("mousedown",Minimap.mousedown,false);
+    this.mapDragger.addEventListener("mouseup",Minimap.mouseup);
+    this.mapDragger.addEventListener("mousemove",Minimap.mouseover);
+    this.mapDragger.addEventListener("mouseout",Minimap.mouseout);
+
     //When the window change, we need to resize the minimap window.
     window.addEventListener('resize', Minimap.repositionMinimap);
 
     // click event for the minimap
     // TODO: Drag event
-    this.svg.addEventListener('click',Minimap.updateMapDragger);
+    this.svg.addEventListener('mouseup',Minimap.updateMapDragger);
 
-    // Adding scroll change listener to the main workspace
-    this.workspace.addScrollChangeListener(Minimap.onScrollChange);
+    //boolen to check whether I am dragging the surface or not
+    this.isDragging= false;
+}
+
+Minimap.mousedown = function(e){
+    Minimap.isDragging=true;
+    e.stopPropagation();
+}
+
+Minimap.mouseup = function(e){
+    Minimap.isDragging = false;
+    Minimap.updateMapDragger(e);
+    e.stopPropagation();
+}
+
+Minimap.mouseout = function(e){
+    Minimap.isDragging = false;
+}
+
+Minimap.mouseover = function(e){
+    if(Minimap.isDragging){
+        Minimap.updateMapDragger(e);
+    }
+    e.stopPropagation();
 }
 
 /**
@@ -98,7 +149,7 @@ Minimap.mirrorEvent = function(event){
     var minimapEvent = Blockly.Events.fromJson(json, Minimap.minimap);
     minimapEvent.run(true);
     Minimap.scaleMinimap();
-    Minimap.setDraggerHeightAndPosition();
+    Minimap.setDraggerHeight();
 }
 
 /**
@@ -113,7 +164,7 @@ Minimap.repositionMinimap = function(){
 /**
 * updates the rectangle's height and position.
 */
-Minimap.setDraggerHeightAndPosition = function (){
+Minimap.setDraggerHeight = function (){
         var workspaceMetrics = Minimap.workspace.getMetrics();
         var minimapMetrics = Minimap.minimap.getMetrics();
         var draggerHeight=(workspaceMetrics.viewHeight/Minimap.workspace.scale)*Minimap.minimap.scale;
@@ -150,7 +201,7 @@ Minimap.scaleMinimap = function (){
     }
 
 /**
-* Handles the onclick event on the minimapBoundingBox
+* Handles the onclick event on the minimapBoundingBox. Changes mapDraggers position.
 * @param {Event} e Event from the mouse click
 */
 Minimap.updateMapDragger = function(e){

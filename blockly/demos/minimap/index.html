@@ -3,10 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly Demo: Minimap </title>
-  <!-- <script src="../../blockly_compressed.js"></script> -->
-  <script src="../../blockly_uncompressed.js"></script>
+  <script src="../../blockly_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
-  <!-- <script src="../../blockly_uncompressed.js"></script> -->
   <script src="../../msg/js/en.js"></script>
   <script src="minimap.js"></script>
   <style>
@@ -24,7 +22,7 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Minimap</h1>
 
-  <p>This is a simple demo showing how a minimap can be implemented</p>
+  <p>This is a simple demo showing how a minimap can be implemented.</p>
 
   <table width="100%">
     <tr>
@@ -60,19 +58,20 @@
          scrollbars: true,
          toolbox: document.getElementById('toolbox')});
 
-    // Inject slave workspace.
-    var slaveWorkspace = Blockly.inject('mapDiv',
+    // Inject workspace for minimap.
+    var minimapWorkspace = Blockly.inject('mapDiv',
         {media: '../../media/',
          readOnly: true,
          zoom:
             {controls: false,
             wheel: true,
-            startScale: 0.15,
-            maxScale: 0.15,
+            startScale: 0.20, //you can change this accorting to your needs
+            maxScale: 0.20,
             minScale: 0.01
             }});
 
-    Minimap.init(masterWorkspace,slaveWorkspace);
+    // Initilizing the minimap.
+    Minimap.init(masterWorkspace,minimapWorkspace);
 
   </script>
   <style>

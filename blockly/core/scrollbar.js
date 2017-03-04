@@ -641,7 +641,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  */
  Blockly.Scrollbar.prototype.updateDisplay_ = function() {
   var show = true;
-  // Check whether our parent/container is visible.
+  // Check whether our parent/container is visible. 
   if (!this.containerVisible_) {
     show = false;
   } else {
@@ -801,12 +801,6 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
     xyRatio.y = ratio;
   }
   this.workspace_.setMetrics(xyRatio);
-
-  // get the absolutePosition
-  var absolutePosition = (this.handlePosition_/this.ratio_);
-
-  // fire scroll change listeners.
-  this.workspace_.fireScrollChangeListeners(absolutePosition,this.horizontal_);
 };
 
 /**

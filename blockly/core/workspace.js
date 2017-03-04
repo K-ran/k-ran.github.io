@@ -493,36 +493,6 @@ Blockly.Workspace.getById = function(id) {
   return Blockly.Workspace.WorkspaceDB_[id] || null;
 };
 
-
-/**
- * Array of scroll change listeners
- * @type {Array}
- * @private
- *
- */
-Blockly.Workspace.prototype.scrollChangeListeners_ = [];
-
-/**
- * Adds callbacks to scrollChangeListeners_. Each one is called in onScroll_
- * of the workspaces scrollbars.
- * @param {!Function} func Function to call.
- */
-Blockly.Workspace.prototype.addScrollChangeListener = function(func) {
-    this.scrollChangeListeners_.push(func);
-};
-
-/**
- * Fires all the callbacks from the scrollChangeListeners_ array.
- * @param {float} absoluteposition of the scroll bar in the workspace
- * @param {boolean} horizontal scrollbar or not
- */
-Blockly.Workspace.prototype.fireScrollChangeListeners= function(position,horizontal) {
-    for (var i = 0, func; func = this.scrollChangeListeners_[i]; i++) {
-      func(position,horizontal);
-    }
-};
-
-
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
 Blockly.Workspace.prototype['clearUndo'] =
