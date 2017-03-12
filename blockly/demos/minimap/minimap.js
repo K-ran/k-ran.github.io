@@ -295,12 +295,11 @@ Minimap.onScrollChange = function(position, horizontal){
 
   var newDraggerPosition = (position * Minimap.minimap.scale / Minimap.workspace.scale);
   if(horizontal){
+    // Change the horizontal position of dragger.
     Minimap.mapDragger.setAttribute("x", newDraggerPosition);
   }
   else{
+    // Change the vertical position of dragger.
     Minimap.mapDragger.setAttribute("y", newDraggerPosition);
   }
-
-  Minimap.setDraggerWidth();
-  Minimap.setDraggerHeight();
 };
