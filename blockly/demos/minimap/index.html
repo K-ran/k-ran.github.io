@@ -27,10 +27,10 @@
   <table width="100%">
     <tr>
       <td>
-        <div id="masterDiv" style="height: 480px; width: 900px;"></div>
+        <div id="masterDiv" style="height: 480px; width: 700px;"></div>
       </td>
       <td>
-        <div id="mapDiv" style="height: 480px; width: 100px;"></div>
+        <div id="mapDiv" style="height: 480px; width: 200px;"></div>
       </td>
     </tr>
   </table>
@@ -50,41 +50,41 @@
 
   <script>
 
-    // Inject master workspace.
+  // Inject master workspace.
+  var PADDING = 5;
+  var masterWorkspace = Blockly.inject('masterDiv',{
+    media: '../../media/',
+    scrollbars: true,
+    toolbox: document.getElementById('toolbox')
+  });
 
-    var PADDING = 5;
-    var masterWorkspace = Blockly.inject('masterDiv',
-        {media: '../../media/',
-         scrollbars: true,
-         toolbox: document.getElementById('toolbox')});
+  // Inject workspace for minimap.
+  var minimapWorkspace = Blockly.inject('mapDiv',
+    {media: '../../media/',
+     readOnly: true,
+     zoom:
+      {controls: false,
+      wheel: true,
+      startScale: 0.1, //you can change this accorting to your needs.
+      maxScale: 0.1,
+      minScale: 0.01
+      }});
 
-    // Inject workspace for minimap.
-    var minimapWorkspace = Blockly.inject('mapDiv',
-        {media: '../../media/',
-         readOnly: true,
-         zoom:
-            {controls: false,
-            wheel: true,
-            startScale: 0.20, //you can change this accorting to your needs
-            maxScale: 0.20,
-            minScale: 0.01
-            }});
-
-    // Initilizing the minimap.
-    Minimap.init(masterWorkspace,minimapWorkspace);
+  // Initilizing the minimap.
+  Minimap.init(masterWorkspace,minimapWorkspace);
 
   </script>
   <style>
     .minimap{
-        position:absolute;
+      position:absolute;
     }
     .mapDragger{
-        cursor: move;
-        fill:rgb(0,0,255);
-        stroke-width:0.5;
-        stroke:rgb(0,0,0);
-        fill-opacity:0.1;
-    }
+      cursor: move;
+      fill:rgb(0,0,255);
+      stroke-width:0.5;
+      stroke:rgb(0,0,0);
+      fill-opacity:0.1;
+  }
   </style>
 
 </body>
