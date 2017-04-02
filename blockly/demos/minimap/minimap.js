@@ -90,8 +90,8 @@ Minimap.init = function(workspace, minimap){
     'width': this.rect.right-this.rect.left,
     'class': 'minimap',
   }, document.getElementById('mapDiv'));
-  this.svg.style.top = this.rect.top;
-  this.svg.style.left = this.rect.left;
+  this.svg.style.top = this.rect.top+'px';
+  this.svg.style.left = this.rect.left+'px';
 
   // Creating a rectangle in the minimap that represents current view.
   Blockly.utils.createSvgElement('rect', {
@@ -161,8 +161,8 @@ Minimap.mirrorEvent = function(event){
 */
 Minimap.repositionMinimap = function(){
   Minimap.rect = document.getElementById('mapDiv').getBoundingClientRect();
-  Minimap.svg.style.top = Minimap.rect.top;
-  Minimap.svg.style.left = Minimap.rect.left;
+  Minimap.svg.style.top = Minimap.rect.top+'px';
+  Minimap.svg.style.left = Minimap.rect.left+'px';
 };
 
 /**
